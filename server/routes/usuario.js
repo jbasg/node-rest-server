@@ -9,7 +9,7 @@ app.get('/usuario', (req, res) => {
     let limite = Number(req.query.limite || 5);
 
     desde = Number(desde);
-    Usuario.find({})
+    Usuario.find({}, 'nombre email rol estado google img')
         .skip(desde)
         .limit(limite)
         .exec((err, usuarios) => {
@@ -77,8 +77,37 @@ app.put('/usuario/:id', (req, res) => {
     })
 })
 
-app.delete('/usuario', (req, res) => {
-    res.json('delete usuario LOCAL');
+app.delete('/usuario/:id', (req, res) => {
+
+    let id = req.params.id;
+
+    Usuario.findByIdAndRemove(id, (err, usuario) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            })
+        }
+
+        if (!usuario) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Usuario no encontrado'
+                }
+            })
+        }
+
+        res.json({
+            ok: true,
+            usuario
+        })
+
+    })
+
+
+
+
 })
 
 module.exports = app;
