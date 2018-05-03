@@ -9,7 +9,7 @@ app.get('/usuario', (req, res) => {
     let limite = Number(req.query.limite || 5);
 
     desde = Number(desde);
-    Usuario.find({}, 'nombre email rol estado google img')
+    Usuario.find({estado : true}, 'nombre email rol estado google img')
         .skip(desde)
         .limit(limite)
         .exec((err, usuarios) => {
@@ -80,8 +80,11 @@ app.put('/usuario/:id', (req, res) => {
 app.delete('/usuario/:id', (req, res) => {
 
     let id = req.params.id;
-
-    Usuario.findByIdAndRemove(id, (err, usuario) => {
+    let cambiaEstado = { 
+        estado : false
+    }
+    //Usuario.findByIdAndRemove(id, (err, usuario) => {
+    Usuario.findByIdAndUpdate(id,cambiaEstado,{ new : true },(err,usuario)=>{
         if (err) {
             return res.status(400).json({
                 ok: false,
