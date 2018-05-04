@@ -3,13 +3,15 @@ const app = express();
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
+const { verificaToken, verificaAdmin_Role } = require('../middelwares/autenticacion');
 
-app.get('/usuario', (req, res) => {
+app.get('/usuario', verificaToken, (req, res) => {
+
     let desde = req.query.desde || 0;
     let limite = Number(req.query.limite || 5);
 
     desde = Number(desde);
-    Usuario.find({estado : true}, 'nombre email rol estado google img')
+    Usuario.find({ estado: true }, 'nombre email rol estado google img')
         .skip(desde)
         .limit(limite)
         .exec((err, usuarios) => {
@@ -32,7 +34,7 @@ app.get('/usuario', (req, res) => {
 
 })
 
-app.post('/usuario/', (req, res) => {
+app.post('/usuario/', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let body = req.body
 
@@ -56,7 +58,7 @@ app.post('/usuario/', (req, res) => {
 
 })
 
-app.put('/usuario/:id', (req, res) => {
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
     let id = req.params.id;
     //let body = req.body;
 
@@ -77,14 +79,14 @@ app.put('/usuario/:id', (req, res) => {
     })
 })
 
-app.delete('/usuario/:id', (req, res) => {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
 
     let id = req.params.id;
-    let cambiaEstado = { 
-        estado : false
-    }
-    //Usuario.findByIdAndRemove(id, (err, usuario) => {
-    Usuario.findByIdAndUpdate(id,cambiaEstado,{ new : true },(err,usuario)=>{
+    let cambiaEstado = {
+            estado: false
+        }
+        //Usuario.findByIdAndRemove(id, (err, usuario) => {
+    Usuario.findByIdAndUpdate(id, cambiaEstado, { new: true }, (err, usuario) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
