@@ -12,6 +12,9 @@
 
 <body>
 
+    <img src="/imagen/productos/5af00fe2c0469b889c292e20-398.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7InJvbGUiOiJBRE1JTl9ST0xFIiwiZXN0YWRvIjp0cnVlLCJnb29nbGUiOmZhbHNlLCJfaWQiOiI1YWViMDk4YjNmNDA3ZjU1YTJmMWE5MWMiLCJub21icmUiOiJNYW5vbG9zIiwiZW1haWwiOiJ0ZXN0MTFAdGVzdC5jb20iLCJfX3YiOjB9LCJpYXQiOjE1MjU2OTA5NzksImV4cCI6MTUyODI4Mjk3OX0.p6R0hFFoT6yUHVNS0gAJtDv35BHHceWVr7_dwnN5kSA"
+    />
+
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
 
     <a href="#" onclick="signOut();">Sign out</a>
@@ -38,16 +41,13 @@
 
 
         }
+
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-            console.log('User signed out.');
+            auth2.signOut().then(function() {
+                console.log('User signed out.');
             });
         }
-
-
-
-
     </script>
 </body>
 
